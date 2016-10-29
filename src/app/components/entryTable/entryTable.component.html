@@ -1,0 +1,68 @@
+
+
+<div class="row">
+
+    <div class="col s2 offset-s1">
+        <h4>{{type}}</h4>
+    </div>
+    <div class="col s4">
+        <form [formGroup]="formG">
+            <div class="input-field">
+                <i class="material-icons prefix">search</i>
+                <input id="icon_prefix" type="text" class="validate" formControlName="filter">
+                <label for="icon_prefix">Filter data</label>
+            </div>
+        </form>
+    </div>
+
+    <div class="col s2">
+        <a class="waves-effect waves-light btn" style="margin-top: 15%" (click)="addEntry()"><i class="material-icons left">add</i> add</a>
+    </div>
+
+    <div class="col s10 offset-s1">
+
+
+        <table class="table table-hover">
+            <thead>
+            <th *ngFor="let column of columns">{{column.display}}</th>
+            <th>Remove</th>
+            <th *ngIf="type=='user'">Company</th>
+            <th *ngIf="type=='company'">Workers</th>
+            </thead>
+            <tbody>
+            <tr *ngFor="let object of table; let i=index">
+                <td  *ngFor="let column of columns" (click)="editEntry(object)">
+                    <span >{{object[column.variable] }}</span>
+                </td>
+                <td><a (click)="openRemoveModal(object)" class="waves-effect waves-light btn"><i class="material-icons">delete</i></a></td>
+                <td *ngIf="type=='user'">
+                    <span>{{object['Company']}}</span>
+                </td>
+                <td *ngIf="type=='company'">
+                    <a class="waves-effect waves-light btn" (click)="openWorkerList(object['Name'])">Worker list</a>
+                </td>
+            </tr>
+            <tr *ngIf="table.length == 0">
+                <p class="text-center">
+                    No {{type}} in base presented....
+                </p>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<!-- Modal Structure -->
+<div id="remove-modal" class="modal">
+    <div class="modal-content">
+        <h4>Removing</h4>
+        <p>Do you want to delete the {{type}}?</p>
+    </div>
+    <div class="modal-footer">
+        <a  class=" modal-action modal-close waves-effect waves-green btn-flat"> Cancel</a>
+        <a  class=" modal-action modal-close waves-effect waves-green btn-flat" (click)="removeEntry()"> Remove</a>
+    </div>
+</div>
+

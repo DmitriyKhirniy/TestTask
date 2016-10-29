@@ -1,0 +1,11 @@
+.error-text{
+    position: absolute;
+    color: #e53935;
+    margin-top: -20px;
+    margin-left: 15%;
+    font-size: 0.8em
+}
+.my-active {
+    top: 12px !important;
+    font-size: 12px !important;
+}

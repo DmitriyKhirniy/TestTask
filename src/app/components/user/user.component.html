@@ -1,0 +1,82 @@
+
+
+<entry-table [columns]="userColumns" [table]="users" [type]="'user'" (editEntryEmitter)="editUser($event)" (addEntryEmitter)="openAddingModal()" (removeEntryEmitter)="removeUser($event)"></entry-table>
+
+<hr>
+
+<!-- Modal Structure -->
+<div id="modal1" class="modal" style="height: 70%;overflow: hidden">
+    <div class="modal-content">
+        <h4 *ngIf="!editMode">Adding user</h4>
+        <h4 *ngIf="editMode">Editing</h4>
+        <p>Fill all fields</p>
+
+        <div class="container">
+            <div class="row">
+
+                <div class="col s12">
+
+                    <form [formGroup]="userForm">
+
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix">account_circle</i>
+                            <input id="icon_prefix"  #firstNameInput type="text" class="validate" formControlName="firstName">
+                            <label [ngClass]="firstNameInput.value?'my-active':''" for="icon_prefix" class="active">First Name</label>
+                            <span *ngIf="userFormValidate && userForm.controls['firstName'].errors" class="error-text">{{getErrors(userForm.controls['firstName'])}}</span>
+                        </div>
+
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix">account_circle</i>
+                            <input id="icon_prefix_last" #lastNameInput type="text" class="validate" formControlName="lastName" >
+                            <label [ngClass]="lastNameInput.value?'my-active': ''" for="icon_prefix_last">Last Name</label>
+                            <span>{{lastNameInput.value?'active': ''}}</span>
+                            <span *ngIf="userFormValidate && userForm.controls['lastName'].errors" class="error-text">{{getErrors(userForm.controls['lastName'])}}</span>
+                        </div>
+
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix">email</i>
+                            <input id="icon_prefix_email" type="text" class="validate" [textMask]="{mask: _emailMask}" [ngModelOptions]="{standalone: true}" [(ngModel)]="userForm.controls['email'].value" (ngModelChange)="emailChanged($event)"  >
+                            <label for="icon_prefix_email" [ngClass]="userForm.controls['email'].value?'my-active':''">E-mail</label>
+                            <span *ngIf="userFormValidate && userForm.controls['email'].errors" class="error-text">{{getErrors(userForm.controls['email'])}}</span>
+                        </div>
+
+                        <div class="switch col s6" style="margin-top: 5%;">
+                            <label>
+                                Male
+                                <input type="checkbox" (change)="userGenderChanged(gender.selected)" #gender formControlName="gender">
+                                <span class="lever"></span>
+                                Female
+                            </label>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="input-field col s6" style="margin-top: 5%">
+                                <select class="browser-default" formControlName="role">
+                                    <option *ngFor="let role of roles"  [value]="role.value">{{role.display}}</option>
+                                </select>
+                            </div>
+
+                            <div class="input-field col s6">
+                                <select class="browser-default" formControlName="company">
+                                    <option value="" disabled selected value="null">Choose your option</option>
+                                    <option *ngFor="let company of companies" [value]="company">{{company}}</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a *ngIf="editMode" class="waves-effect waves-green btn-flat" (click)="removeUser()">Remove</a>
+        <a *ngIf="editMode" class="waves-effect waves-green btn-flat" (click)="updateUser()">Update</a>
+        <a *ngIf="!editMode" class="waves-effect waves-green btn-flat" (click)="addUser()">Add</a>
+        <span *ngIf="userFormValidate && userForm.status == 'INVALID'" class="error-text">Form is Invalid</span>
+    </div>
+</div>

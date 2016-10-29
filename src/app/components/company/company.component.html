@@ -1,0 +1,79 @@
+
+<entry-table [type]="'company'" [columns]="companyColumns" [table]="companies" (editEntryEmitter)="editCompany($event)" (addEntryEmitter)="addCompany()" (removeEntryEmitter)="removeCompany($event)"></entry-table>
+<hr>
+<!-- Modal Structure -->
+<div id="company-modal" class="modal">
+    <div class="modal-content">
+        <h4 *ngIf="editMode">Company editing</h4>
+        <h4 *ngIf="!editMode">Create company</h4>
+        <p *ngIf="editMode">{{ editingCompany?.Name}}</p>
+
+
+            <form [formGroup]="companyForm">
+
+                <div class="row">
+                    <div class="input-field col s5">
+                        <i class="material-icons prefix">search</i>
+                        <input id="icon_prefix" type="text" class="validate" formControlName="name" #companyName>
+                        <label for="icon_prefix" [ngClass]="companyName.value?'my-active':''">Name</label>
+                        <span *ngIf="formValidate && companyForm.controls['name'].errors" class="error-text">{{getErrors(companyForm.controls['name'])}}</span>
+                    </div>
+
+                    <div class="input-field col s7">
+                        <i class="material-icons prefix">search</i>
+                        <input id="icon_prefix_address" type="text" class="validate" formControlName="address" #companyAddress>
+                        <label for="icon_prefix" [ngClass]="companyAddress.value?'my-active':''">address</label>
+                        <span *ngIf="formValidate && companyForm.controls['address'].errors" class="error-text">{{getErrors(companyForm.controls['address'])}}</span>
+                    </div>
+
+                    <div class="input-field col s5">
+                        <i class="material-icons prefix">phone</i>
+                        <input id="icon_prefix_phone" type="text" class="validate" formControlName="phoneNumber" #companyPhone [textMask]="{mask: mask}" [(ngModel)]="companyForm.controls['phoneNumber'].value">
+                        <label for="icon_prefix" [ngClass]="companyPhone.value?'my-active':''">Phone number</label>
+                        <span *ngIf="formValidate && companyForm.controls['phoneNumber'].errors" class="error-text">{{getErrors(companyForm.controls['phoneNumber'])}}</span>
+                    </div>
+
+                    <div class="input-field col s7">
+                        <i class="material-icons prefix">search</i>
+                        <input id="icon_prefix_web" type="text" class="validate" formControlName="site" #companyWeb>
+                        <label for="icon_prefix" [ngClass]="companyWeb.value?'my-active':''">Web site</label>
+                        <span *ngIf="formValidate && companyForm.controls['site'].errors" class="error-text">{{getErrors(companyForm.controls['site'])}}</span>
+                    </div>
+
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">search</i>
+                        <textarea id="textarea1" class="materialize-textarea" formControlName="description"></textarea>
+                        <label for="textarea1">Description</label>
+                        <span *ngIf="formValidate && companyForm.controls['description'].errors" class="error-text">{{getErrors(companyForm.controls['description'])}}</span>
+                    </div>
+                </div>
+
+            </form>
+
+
+
+        <div *ngIf="ok && editMode">
+            <p-gmap [options]="options"  [overlays]="overlays" [style]="{'width':'100%','height':'320px'}" ></p-gmap>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a *ngIf="!editMode"  class=" modal-action modal-close waves-effect waves-green btn-flat" (click)="createCompany()">Add company</a>
+        <a *ngIf="editMode"  class=" modal-action modal-close waves-effect waves-green btn-flat" (click)="updateCompany()">Update</a>
+    </div>
+</div>
+
+
+
+<style>
+    .error-text{
+        position: absolute;
+        color: #e53935;
+        margin-top: -20px;
+        margin-left: 15%;
+        font-size: 0.8em
+    }
+    .my-active{
+        top: 12px!important;
+        font-size: 12px !important;
+    }
+</style>
